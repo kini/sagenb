@@ -1234,12 +1234,10 @@ function update_introspection_text(id, text) {
     
     if (intr.loaded) {
         introspect_div.html(text);
-        if (contains_mathjax(text)) {
-            try {
-                MathJax.Hub.Queue(["Typeset",MathJax.Hub,introspect_div.get(0)]);
-            } catch (e) {
-                introspect_div.html('Error typesetting mathematics' + introspect_div.html());
-            }
+        try {
+            MathJax.Hub.Queue(["Typeset",MathJax.Hub,introspect_div.get(0)]);
+        } catch (e) {
+            introspect_div.html('Error typesetting mathematics' + introspect_div.html());
         }
 
         introspect_div.find('.docstring').prepend('<div class="click-message" style="cursor: pointer">' + translations["Click here to pop out"] + '</div><div class="unprinted-note">' + translations["unprinted"] + '</div>');
@@ -3532,25 +3530,6 @@ function cancel_update_check() {
 }
 
 
-function contains_mathjax(text) {
-    /*
-    Returns true if text contains some mathjax text.  This function
-    sucks, since it really just looks for class="math" or type="math/tex" and is easy to
-    throw off.  Fix this!
-
-    INPUT:
-        text -- a string
-    */
-    // TODO: Use a RegExp.
-    text = text.toLowerCase();
-    // Mathjax - match math/tex and math/tex; mode=display
-    return (text.indexOf('class="math"') !== -1 ||
-            text.indexOf("class='math'") !== -1 ||
-            text.indexOf('type="math/tex') !== -1 ||
-            text.indexOf("type='math/tex") !== -1);
-}
-
-
 function set_output_text(id, status, output_text, output_text_wrapped,
                          output_html, introspect_html, no_interact) {
     /*
@@ -3609,9 +3588,7 @@ function set_output_text(id, status, output_text, output_text_wrapped,
 
         cell_interact = get_element('cell-interact-' + id);
         cell_interact.innerHTML = new_interact_output;
-        if (contains_mathjax(new_interact_output)) {
-            MathJax.Hub.Queue(["Typeset",MathJax.Hub,cell_interact]);
-        }
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub,cell_interact]);
 
         return false;
     }
@@ -3633,7 +3610,7 @@ function set_output_text(id, status, output_text, output_text_wrapped,
     cell_output_html.innerHTML = output_html;
 
     // Call MathJax on the final output.
-    if (status === 'd' && (contains_mathjax(output_text)||contains_mathjax(output_text_wrapped))) {
+    if (status === 'd' ) {
         try {
             MathJax.Hub.Queue(["Typeset",MathJax.Hub,cell_output]);
         } catch (e) {
@@ -3657,13 +3634,7 @@ function set_output_text(id, status, output_text, output_text_wrapped,
     if (status === 'd' && introspect_html === '' && is_interacting_cell(id)) {
         // This is the first time that the underlying Python interact
         // function (i.e., interact.recompute) is actually called!
-        if (contains_mathjax(output_text_wrapped)) {
-            try {
-                MathJax.Hub.Queue(["Typeset",MathJax.Hub,cell_output]);
-            } catch (e2) {
-                // Do nothing.
-            }
-        }
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub,cell_output]);
         return 'trigger_interact';
     }
 
