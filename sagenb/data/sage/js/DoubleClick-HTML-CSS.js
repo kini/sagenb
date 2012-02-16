@@ -27,4 +27,4 @@ MathJax.Hub.Register.StartupHook("HTML-CSS Jax Ready", function () {
   MathJax.Hub.Startup.signal.Post("DoubleClick HTML-CSS Ready");
 });
 
-MathJax.Ajax.loadComplete("[MathJax]/extensions/DoubleClick-HTML-CSS.js");
+MathJax.Ajax.loadComplete("[MathJax]/../sage/js/DoubleClick-HTML-CSS.js");
