@@ -1,4 +1,7 @@
 MathJax.Hub.Config({
+
+    extensions: ["DoubleClick-HTML-CSS.js"],
+
     tex2jax: {
 	inlineMath: [['$','$'],['\\(','\\)']],
 	processEscapes: true,
