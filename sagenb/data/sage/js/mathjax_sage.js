@@ -1,4 +1,7 @@
 MathJax.Hub.Config({
+
+  extensions: ["[MathJax]/../sage/js/DoubleClickEvent.js"],
+
     tex2jax: {
 	inlineMath: [['$','$'],['\\(','\\)']],
 	processEscapes: true,
