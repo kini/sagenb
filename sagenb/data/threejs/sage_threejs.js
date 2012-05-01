@@ -37,12 +37,12 @@ function sage_threejs_plot(id,url) {
         loader.load( url, function ( object ) {
             myobj=object.children[0];
             if (haswebgl) {
-                mesh = new THREE.meshTHREE.SceneUtils.createMultiMaterialObject(myobj.geometry, 
+                mesh = new THREE.SceneUtils.createMultiMaterialObject(myobj.geometry, 
                                                                       [new THREE.MeshBasicMaterial({color: 0x6666ff}),
                                                                        new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true, transparent: true, opacity: 0.5 } )] );
             } else {
-                mesh = myobj
-                mesh.material.wireframe = true
+                myobj.material.wireframe = true;
+                mesh = object;
             }
             item.scene.add(mesh);
         });
