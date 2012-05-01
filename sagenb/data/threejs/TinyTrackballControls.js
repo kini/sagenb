@@ -315,6 +315,16 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
 
 		if ( ! _this.enabled ) return;
 
+            var clientX;
+            var clientY;
+            if (event.touches === undefined) {
+                clientX = event.clientX;
+                clientY = event.clientY;
+            } else {
+                clientX = event.touches[0].clientX;
+                clientY = event.touches[0].clientY;
+            }
+
 		event.preventDefault();
 		event.stopPropagation();
 
@@ -324,15 +334,15 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
 
 			if ( _state === STATE.ROTATE && !_this.noRotate ) {
 
-				_rotateStart = _rotateEnd = _this.getMouseProjectionOnBall( event.clientX, event.clientY );
+				_rotateStart = _rotateEnd = _this.getMouseProjectionOnBall( clientX, clientY );
 
 			} else if ( _state === STATE.ZOOM && !_this.noZoom ) {
 
-				_zoomStart = _zoomEnd = _this.getMouseOnScreen( event.clientX, event.clientY );
+				_zoomStart = _zoomEnd = _this.getMouseOnScreen( clientX, clientY );
 
 			} else if ( !this.noPan ) {
 
-				_panStart = _panEnd = _this.getMouseOnScreen( event.clientX, event.clientY );
+				_panStart = _panEnd = _this.getMouseOnScreen( clientX, clientY );
 
 			}
 
@@ -341,14 +351,22 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
 	};
 
 	function mousemove( event ) {
-
+            // see http://stackoverflow.com/questions/5885808/includes-touch-events-clientx-y-scrolling-or-not
 		if ( ! _this.enabled ) return;
-
+            var clientX;
+            var clientY;
+            if (event.touches === undefined) {
+                clientX = event.clientX;
+                clientY = event.clientY;
+            } else {
+                clientX = event.touches[0].clientX;
+                clientY = event.touches[0].clientY;
+            }
 		if ( _keyPressed ) {
 
-			_rotateStart = _rotateEnd = _this.getMouseProjectionOnBall( event.clientX, event.clientY );
-			_zoomStart = _zoomEnd = _this.getMouseOnScreen( event.clientX, event.clientY );
-			_panStart = _panEnd = _this.getMouseOnScreen( event.clientX, event.clientY );
+			_rotateStart = _rotateEnd = _this.getMouseProjectionOnBall( clientX, clientY );
+			_zoomStart = _zoomEnd = _this.getMouseOnScreen( clientX, clientY );
+			_panStart = _panEnd = _this.getMouseOnScreen( clientX, clientY );
 
 			_keyPressed = false;
 
@@ -360,15 +378,15 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
 
 		} else if ( _state === STATE.ROTATE && !_this.noRotate ) {
 
-			_rotateEnd = _this.getMouseProjectionOnBall( event.clientX, event.clientY );
+			_rotateEnd = _this.getMouseProjectionOnBall( clientX, clientY );
 
 		} else if ( _state === STATE.ZOOM && !_this.noZoom ) {
 
-			_zoomEnd = _this.getMouseOnScreen( event.clientX, event.clientY );
+			_zoomEnd = _this.getMouseOnScreen( clientX, clientY );
 
 		} else if ( _state === STATE.PAN && !_this.noPan ) {
 
-			_panEnd = _this.getMouseOnScreen( event.clientX, event.clientY );
+			_panEnd = _this.getMouseOnScreen( clientX, clientY );
 
 		}
 
@@ -390,6 +408,11 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
 	this.domElement.addEventListener( 'mousemove', mousemove, false );
 	this.domElement.addEventListener( 'mousedown', mousedown, false );
 	this.domElement.addEventListener( 'mouseup', mouseup, false );
+
+    this.domELement.addEventListener( 'touchmove', mousemove, false);
+    this.domELement.addEventListener( 'touchstart', mousedown, false);
+    this.domELement.addEventListener( 'touchend', mouseup, false);
+    
 
 	window.addEventListener( 'keydown', keydown, false );
 	window.addEventListener( 'keyup', keyup, false );
