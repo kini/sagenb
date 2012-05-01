@@ -323,6 +323,7 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
             } else {
                 clientX = event.touches[0].clientX;
                 clientY = event.touches[0].clientY;
+                event.button = STATE.ROTATE;
             }
 
 		event.preventDefault();
@@ -361,6 +362,7 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
             } else {
                 clientX = event.touches[0].clientX;
                 clientY = event.touches[0].clientY;
+                _state = STATE.ROTATE;
             }
 		if ( _keyPressed ) {
 
