@@ -8,7 +8,6 @@ function sage_threejs_plot(id,url) {
     var hascanvas = !! window.CanvasRenderingContext2D;
     
     if(hascanvas) {
-        var contextR, contextW;
         document.addEventListener( "DOMContentLoaded", init, false);
     }
     
@@ -34,11 +33,17 @@ function sage_threejs_plot(id,url) {
         //item.controls.noZoom = true;
         //item.controls.noPan = true;
         var loader = new THREE.OBJLoader();
+        var mesh;
         loader.load( url, function ( object ) {
             myobj=object.children[0];
-            var mesh = new THREE.SceneUtils.createMultiMaterialObject(myobj.geometry, 
+            if (haswebgl) {
+                mesh = new THREE.meshTHREE.SceneUtils.createMultiMaterialObject(myobj.geometry, 
                                                                       [new THREE.MeshBasicMaterial({color: 0x6666ff}),
                                                                        new THREE.MeshBasicMaterial({ color: 0x000000, wireframe: true, transparent: true, opacity: 0.5 } )] );
+            } else {
+                mesh = myobj
+                mesh.material.wireframe = true
+            }
             item.scene.add(mesh);
         });
         
