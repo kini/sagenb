@@ -409,9 +409,9 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
 	this.domElement.addEventListener( 'mousedown', mousedown, false );
 	this.domElement.addEventListener( 'mouseup', mouseup, false );
 
-    this.domELement.addEventListener( 'touchmove', mousemove, false);
-    this.domELement.addEventListener( 'touchstart', mousedown, false);
-    this.domELement.addEventListener( 'touchend', mouseup, false);
+    this.domElement.addEventListener( 'touchmove', mousemove, false);
+    this.domElement.addEventListener( 'touchstart', mousedown, false);
+    this.domElement.addEventListener( 'touchend', mouseup, false);
     
 
 	window.addEventListener( 'keydown', keydown, false );
