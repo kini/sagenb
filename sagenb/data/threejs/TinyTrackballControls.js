@@ -416,10 +416,12 @@ THREE.TinyTrackballControls = function ( object, domElement ) {
     this.domElement.addEventListener( 'touchend', mouseup, false);
     
 
-	window.addEventListener( 'keydown', keydown, false );
-	window.addEventListener( 'keyup', keyup, false );
+    // I don't see the point in these...
+    //window.addEventListener( 'keydown', keydown, false );
+    //window.addEventListener( 'keyup', keyup, false );
     
-    document.addEventListener('scroll', this.relocate, false);
-    window.addEventListener('resize', this.relocate, false);
+    // These may still be necessary...
+    //document.addEventListener('scroll', this.relocate, false);
+    //window.addEventListener('resize', this.relocate, false);
     
 }
