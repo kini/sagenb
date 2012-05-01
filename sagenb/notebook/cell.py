@@ -2341,7 +2341,12 @@ class Cell(Cell_generic):
                 F.endswith('.jpg') or F.endswith('.gif')):
                 images.append('<img src="%s?%d">' % (url, time.time()))
             elif F.endswith('.obj'):
-                images.append("""<a href="javascript:sage3d_show('%s', '%s_%s', '%s');">Click for interactive view.</a>""" % (url, self._id, F, F[:-4]))
+                from uuid import uuid4
+                plotid="threejsplot-"+str(uuid4())
+                script = """<div id="%s" style="width:700px;height:400px;border:solid 1px"></div>"""%plotid
+                script += """<script>setTimeout(function() {sage_threejs_plot("%s", "%s");},100)</script>"""%(plotid,url)
+                script += """<br/><a href="%s">Download .obj file</a>"""%url
+                images.append(script)
             elif F.endswith('.mtl') or F.endswith(".objmeta"):
                 pass # obj data
             elif F.endswith('.svg'):
