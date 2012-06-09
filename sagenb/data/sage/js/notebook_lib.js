@@ -364,6 +364,34 @@ function bind_events() {
         cell.className = 'cell_input_hide';
         cell.style.height = '1em';   
     });
+
+    $('.cell_input').focus(function () {
+        var id = $(this).attr("id");
+        var cell_id = get_cell_id_from_id(id);
+        cell_focused(this, cell_id);
+        return true;
+    });
+    $('.cell_input').blur(function () {
+        var id = $(this).attr("id");
+        var cell_id = get_cell_id_from_id(id);
+        cell_blur(cell_id);
+        return true;
+    });
+    $('.cell_input').keyup(function (event) {
+        var id = $(this).attr("id");
+        var cell_id = get_cell_id_from_id(id);
+        return input_keyup(cell_id, event);
+    });
+    $('.cell_input').keydown(function (event) {
+        var id = $(this).attr("id");
+        var cell_id = get_cell_id_from_id(id);
+        return input_keydown(cell_id, event);
+    });
+    $('.cell_input').keypress(function (event) {
+        var id = $(this).attr("id");
+        var cell_id = get_cell_id_from_id(id);
+        return input_keypress(cell_id, event);
+    });
 }
 
 
