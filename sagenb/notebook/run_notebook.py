@@ -105,7 +105,6 @@ IOLoop.instance().start()"""
         # TODO: Check to see if server is running already (PID file?)
         self.prepare_kwds(kw)
         run_file = os.path.join(kw['directory'], 'run_tornado')
-        print "run_file is ", run_file
 
         with open(run_file, 'w') as script:
             script.write((self.config_stub+self.TORNADO_NOTEBOOK_CONFIG)%kw)
@@ -561,11 +560,7 @@ def notebook_run(self,
 
     kw = dict(port=port, automatic_login=automatic_login, secure=secure, private_pem=private_pem, public_pem=public_pem,
               interface=interface, directory=directory, pidfile=pidfile, cwd=cwd, profile=profile)
-    print "server is ",server
-    print "kw is ", kw
-    print "command[server] is", command[server]
     cmd = command[server]().run_command(kw)
-    print "The command is ", cmd
     if cmd is None:
         return
 
