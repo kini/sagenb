@@ -88,6 +88,31 @@ def save_notebook(notebook):
     def run_command(self, kw):
         raise NotImplementedError
 
+class NotebookRunTornado(NotebookRun):
+    name="tornado"
+    TORNADO_NOTEBOOK_CONFIG = """
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
+
+%(open_page)s
+http_server = HTTPServer(WSGIContainer(flask_app))
+http_server.listen(%(port)s)
+IOLoop.instance().start()"""
+
+    def run_command(self, kw):
+        """Run a tornado webserver."""
+        # TODO: Check to see if server is running already (PID file?)
+        self.prepare_kwds(kw)
+        run_file = os.path.join(kw['directory'], 'run_tornado')
+        print "run_file is ", run_file
+
+        with open(run_file, 'w') as script:
+            script.write((self.config_stub+self.TORNADO_NOTEBOOK_CONFIG)%kw)
+
+        cmd = 'python %s' % (run_file)
+        return cmd
+
 class NotebookRunuWSGI(NotebookRun):
     name="uWSGI"
     uWSGI_NOTEBOOK_CONFIG  = """
@@ -389,7 +414,7 @@ def notebook_setup(self=None):
 
     print "Successfully configured notebook."
 
-command={'flask': NotebookRunFlask, 'twistd': NotebookRunTwisted, 'uwsgi': NotebookRunuWSGI}
+command={'flask': NotebookRunFlask, 'twistd': NotebookRunTwisted, 'uwsgi': NotebookRunuWSGI, 'tornado': NotebookRunTornado}
 def notebook_run(self,
              directory     = None,
              port          = 8080,
@@ -411,7 +436,7 @@ def notebook_run(self,
              fork          = False,
              quiet         = False,
 
-             server = "twistd",
+             server = "tornado",
              profile = False,
 
              subnets = None,
@@ -536,7 +561,11 @@ def notebook_run(self,
 
     kw = dict(port=port, automatic_login=automatic_login, secure=secure, private_pem=private_pem, public_pem=public_pem,
               interface=interface, directory=directory, pidfile=pidfile, cwd=cwd, profile=profile)
+    print "server is ",server
+    print "kw is ", kw
+    print "command[server] is", command[server]
     cmd = command[server]().run_command(kw)
+    print "The command is ", cmd
     if cmd is None:
         return
 
