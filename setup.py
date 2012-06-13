@@ -28,7 +28,7 @@ def all_files(dir, lstrip):
     
 
 code = setup(name = 'sagenb',
-      version     = '0.9.1',  # the spkg-dist script assumes single quotes here
+      version     = '0.9.2',  # the spkg-dist script assumes single quotes here
       description = 'The Sage Notebook',
       license     = 'GNU Public License (GPL) v2+',
       author      = 'William Stein et al.',
@@ -43,6 +43,7 @@ code = setup(name = 'sagenb',
                          , 'hg-git'
                          , 'pyOpenSSL<=0.12'
                          , 'webassets'
+                         , 'tornado>=2.1.1'
                          ],
       test_suite = 'sagenb.testing.run_tests.all_tests',
       packages    = [ 'sagenb'
