@@ -91,12 +91,30 @@ def save_notebook(notebook):
 class NotebookRunTornado(NotebookRun):
     name="tornado"
     TORNADO_NOTEBOOK_CONFIG = """
+from tornado import web
 from tornado.wsgi import WSGIContainer
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
+from tornado_version.tornado_handlers import *
+
+# mixing Tornado and WSGI apps in the same server. see
+# https://github.com/bdarnell/django-tornado-demo/blob/master/testsite/tornado_main.py
+# But eventually we want to move away from flask to tornado
 
 %(open_page)s
-http_server = HTTPServer(WSGIContainer(flask_app))
+wsgi_app = WSGIContainer(flask_app)
+ShellRouter = SockJSRouter(ShellConnection, '/shell',
+                 user_settings=dict(response_limit=4096))
+IOPubRouter = SockJSRouter(IOPubConnection, '/iopub',
+                 user_settings=dict(response_limit=4096))
+print IOPubRouter
+handlers = [('/hello-tornado', HelloHandler)] + ShellRouter.urls + IOPubRouter.urls + [('.*', web.FallbackHandler, dict(fallback=wsgi_app))]
+settings = dict(
+    template_path = os.path.join(os.environ["SAGE_ROOT"], "devel", "sagenb",
+        "sagenb", "data", "sage"),
+)
+tornado_app = web.Application(handlers, **settings)
+http_server = HTTPServer(tornado_app)
 http_server.listen(%(port)s)
 IOLoop.instance().start()"""
 
