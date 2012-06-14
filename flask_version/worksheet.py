@@ -85,9 +85,9 @@ def worksheet(username, id, worksheet=None):
     # /home/pub/* is handled in worksheet_listing.py
     assert worksheet is not None
     worksheet.sage()
-    s = g.notebook.html(worksheet_filename=worksheet.filename(),
+    worksheet_html = g.notebook.html(worksheet_filename=worksheet.filename(),
                         username=g.username)
-    return s
+    return worksheet_html
 
 def worksheet_command(target, **route_kwds):
     if 'methods' not in route_kwds:
